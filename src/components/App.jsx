@@ -7,16 +7,31 @@ import Filter from './Filter';
 
 class App extends Component {
   state = {
-    contacts: [ ],
+    contacts: [],
     filter: '',
   };
- 
-    // === Добавление нового контакта 1
-	handleSubmitData = data => {
-	  this.setState(({ contacts }) => ({
-		  contacts: [data, ...contacts],
-	  }));
-	};
+
+  
+  // === Добавление нового контакта
+  handleSubmitData = data => {
+    let searcheIndex = 0;
+
+    // Проверка на уже имеющееся в контактах имя
+    this.state.contacts.map(contact => {
+      if (contact.name.toLowerCase() === data.name.toLowerCase()) {
+        searcheIndex += 1;
+      };
+    });
+
+    // Если совпадений нет - записать контакт
+    if (searcheIndex === 0) {
+      this.setState(({ contacts }) => ({
+        contacts: [data, ...contacts],
+      }));
+    } else {
+      alert(`${data.name} is already in contacts.`);
+    }
+  };
 
   // === Обновление filter в state
   changeFilter = event => {
