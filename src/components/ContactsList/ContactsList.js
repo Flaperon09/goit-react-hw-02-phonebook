@@ -1,14 +1,16 @@
 import React, { Component } from 'react';
-import shortid from 'shortid';
-import { ContactListItem } from './ContactsList.styled';
+import { ContactListItem, ButtonDelete } from './ContactsList.styled';
 
 class ContactsList extends Component {
     render() {
+        const { contacts, onDeleteContact } = this.props;
         return (
             <div>
                 <ul>
-                    {this.props.contacts.map(contact =>
-                        <ContactListItem key={shortid.generate()}>{contact.name}: {contact.number}</ContactListItem>)
+                    {contacts.map(contact =>
+                        <ContactListItem key={contact.id}>{contact.name}: {contact.number}
+                            <ButtonDelete onClick={() => onDeleteContact(contact.id)}>Delete</ButtonDelete>
+                        </ContactListItem>)
                     }
                 </ul>
             </div>

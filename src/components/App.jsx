@@ -11,7 +11,6 @@ class App extends Component {
     filter: '',
   };
 
-  
   // === Добавление нового контакта
   handleSubmitData = data => {
     let searcheIndex = 0;
@@ -21,6 +20,7 @@ class App extends Component {
       if (contact.name.toLowerCase() === data.name.toLowerCase()) {
         searcheIndex += 1;
       };
+      return searcheIndex;
     });
 
     // Если совпадений нет - записать контакт
@@ -41,9 +41,16 @@ class App extends Component {
   // === Фильтрация контактов
   getVisibleContacts = () => {
 	  const { filter, contacts } = this.state;
-    const normalizedFilter = filter.toLowerCase(); // Приведение текста к нижнему регистру
+    const normalizedFilter = filter.toLowerCase();
 	  return contacts.filter(contact => contact.name.toLowerCase().includes(normalizedFilter),);
   }
+
+  // === Удаление контакта
+  deleteContact = contactId => {
+	  this.setState(prevState => ({
+		  contacts: prevState.contacts.filter(contact => contact.id !== contactId),
+	  }));
+  };
 
   render() {
     return (
@@ -61,7 +68,8 @@ class App extends Component {
             value={this.state.filter}
             onChange={this.changeFilter} />
           <ContactsList
-            contacts={this.getVisibleContacts()}/>
+            contacts={this.getVisibleContacts()}
+            onDeleteContact={this.deleteContact}/>
         </Section>
 
     </div>
