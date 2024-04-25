@@ -4,14 +4,14 @@ import shortid from 'shortid';
 import Section from './Section';
 import Form from './Form';
 import ContactsList from './ContactsList';
+import Filter from './Filter';
 
 class App extends Component {
   state = {
-    contacts: [
-      // { id: 'id-1', name: 'Mylene Farmer' },
-      // { id: 'id-2', name: 'Sandra'},
-    ],
+    contacts: [  ],
     name: '',
+    number: '',
+    filter: '',
   };
 
   // === Обновление state (объект name) при вводе в <input>
@@ -29,7 +29,8 @@ class App extends Component {
     // Формирование нового контакта из name
     const addName = {
 		  id: shortid.generate(), // Генерация уникального ID
-		  name: this.state.name,
+      name: this.state.name,
+      number: this.state.number,
     };
     // Операция добавления нового контакта в state
 	  this.setState(({ contacts }) => ({
@@ -41,8 +42,22 @@ class App extends Component {
 
 	// === Очистка формы после отправки данных
   reset = () => {
-    this.setState({ name: '' });
+    this.setState({ name: '', number: '', });
   };
+
+  // === Обновление filter в state
+  changeFilter = event => {
+    this.setState({ filter: event.currentTarget.value });
+    console.log(this.state.filter);
+  };
+
+  // === Фильтрация контактов
+  getVisibleContacts = () => {
+	  const { filter, contacts } = this.state;
+    const normalizedFilter = filter.toLowerCase(); // Приведение текста к нижнему регистру
+    console.log(filter);
+	  return contacts.filter(contact => contact.name.toLowerCase().includes(normalizedFilter),);
+  }
 
   render() {
     return (
@@ -52,14 +67,18 @@ class App extends Component {
 
         <Section title="Phonebook">
           <Form
-            value={this.state.name}
+            valueName={this.state.name}
+            valueNumber={this.state.number}
             onChange={this.handleChange}
             onSubmit={this.handleSubmit} />
         </Section>
 
         <Section title="Contacts">
+          <Filter
+            value={this.state.filter}
+            onChange={this.changeFilter} />
           <ContactsList
-            contacts={this.state.contacts} />
+            contacts={this.getVisibleContacts()}/>
         </Section>
 
     </div>

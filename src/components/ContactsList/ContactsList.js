@@ -8,7 +8,7 @@ class ContactsList extends Component {
             <div>
                 <ul>
                     {this.props.contacts.map(contact =>
-                        <ContactListItem key={shortid.generate()}>{contact.name}</ContactListItem>)
+                        <ContactListItem key={shortid.generate()}>{contact.name}: {contact.number}</ContactListItem>)
                     }
                 </ul>
             </div>
