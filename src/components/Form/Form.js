@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import shortid from 'shortid';
+// import shortid from 'shortid';
 import { FormData, FormLabel, FormLabelName, FormInputName } from './Form.styled';
 
 class Form extends Component {
@@ -14,17 +14,11 @@ class Form extends Component {
         this.setState({ [name]: value, });
     };
 
-      // === Добавление нового контакта
+    // === Добавление нового контакта
 	handleSubmit = event => {
         event.preventDefault();
-        // Формирование нового контакта из name
-        const addName = {
-		    id: shortid.generate(), // Генерация уникального ID
-            name: this.state.name,
-            number: this.state.number,
-        };
         // Возврат нового контакта в App
-        this.props.onSubmit(addName);
+        this.props.onSubmit(this.state);
         // Очистка формы после отправки данных
         this.reset();
   };

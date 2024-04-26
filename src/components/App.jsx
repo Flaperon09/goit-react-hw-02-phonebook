@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import { GlobalStyle } from "./GlobalStyle";
-import Section from './Section';
+import shortid from 'shortid';
+import { Section } from './Section';
 import Form from './Form';
-import ContactsList from './ContactsList';
-import Filter from './Filter';
+import { ContactsList } from './ContactsList';
+import { Filter } from './Filter';
+import { ContactsInfo } from './ContactsInfo';
 
 class App extends Component {
   state = {
@@ -13,18 +15,21 @@ class App extends Component {
 
   // === Добавление нового контакта
   handleSubmitData = data => {
-    let searcheIndex = 0;
+    // Добавление id в объект контакта
+    data.id = shortid.generate();
+
+    let searchParam = 0;
 
     // Проверка на уже имеющееся в контактах имя
     this.state.contacts.map(contact => {
       if (contact.name.toLowerCase() === data.name.toLowerCase()) {
-        searcheIndex += 1;
+        searchParam += 1;
       };
-      return searcheIndex;
+      return searchParam;
     });
 
     // Если совпадений нет - записать контакт
-    if (searcheIndex === 0) {
+    if (searchParam === 0) {
       this.setState(({ contacts }) => ({
         contacts: [data, ...contacts],
       }));
@@ -67,9 +72,12 @@ class App extends Component {
           <Filter
             value={this.state.filter}
             onChange={this.changeFilter} />
-          <ContactsList
-            contacts={this.getVisibleContacts()}
-            onDeleteContact={this.deleteContact}/>
+          <ContactsList>
+            <ContactsInfo
+              contacts={this.getVisibleContacts()}
+              onDeleteContact={this.deleteContact}
+            />
+          </ContactsList>
         </Section>
 
     </div>
