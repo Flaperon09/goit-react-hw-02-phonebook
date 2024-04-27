@@ -5,7 +5,6 @@ import { Section } from './Section';
 import Form from './Form';
 import { ContactsList } from './ContactsList';
 import { Filter } from './Filter';
-import { ContactsInfo } from './ContactsInfo';
 
 class App extends Component {
   state = {
@@ -17,27 +16,17 @@ class App extends Component {
   handleSubmitData = data => {
     // Добавление id в объект контакта
     data.id = shortid.generate();
-
-    let searchParam = 0;
-
-    // Проверка на уже имеющееся в контактах имя
-    this.state.contacts.map(contact => {
-      if (contact.name.toLowerCase() === data.name.toLowerCase()) {
-        searchParam += 1;
-      };
-      return searchParam;
-    });
-
-    // Если совпадений нет - записать контакт
-    if (searchParam === 0) {
-      this.setState(({ contacts }) => ({
-        contacts: [data, ...contacts],
-      }));
+    
+    // Проверка наличия контакта в state
+    if (this.state.contacts.find(option => option.name.toLowerCase() === data.name.toLowerCase())) {
+      return alert(`${data.name} is already in contacts.`);
     } else {
-      alert(`${data.name} is already in contacts.`);
+        this.setState(({ contacts }) => ({
+          contacts: [data, ...contacts],
+        }));
     }
   };
-
+    
   // === Обновление filter в state
   changeFilter = event => {
     this.setState({ filter: event.currentTarget.value });
@@ -72,12 +61,9 @@ class App extends Component {
           <Filter
             value={this.state.filter}
             onChange={this.changeFilter} />
-          <ContactsList>
-            <ContactsInfo
-              contacts={this.getVisibleContacts()}
-              onDeleteContact={this.deleteContact}
-            />
-          </ContactsList>
+          <ContactsList
+            contacts={this.getVisibleContacts()}
+            onDeleteContact={this.deleteContact} />
         </Section>
 
     </div>
